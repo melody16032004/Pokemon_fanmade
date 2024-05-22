@@ -4,11 +4,23 @@ import entity.Flower;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import static utils.Constants.TileConstants.*;
@@ -16,9 +28,7 @@ import static utils.Constants.TileConstants.*;
 public class TileManager {
 
     GamePanel gamePanel;
-    Flower flower;
     public Tile[][] tile;
-    Random rand = new Random();
     String[] fileName = new String[]{
         "flower/flower_0",
         "grass/grass_0",
@@ -28,7 +38,7 @@ public class TileManager {
         "tree/tree_0",
         "dirt/dirt_0"
     };
-    int[][] tmp = new int[fileName.length][9];
+    static int[][] lvlData;
 
     public BufferedImage getTile(int x, int y) {
         return tile[x][y].img;
@@ -39,6 +49,7 @@ public class TileManager {
         tile = new Tile[fileName.length][9];
 
         geteTileImage();
+
     }
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
@@ -68,13 +79,6 @@ public class TileManager {
             for (int j = 0; j < GetTilesAmount(i); j++) {
                 tile[i][j] = new Tile();
 
-//                if (i == 4 && j < 10) {
-//                    img = GetSpriteAtlas("tiles/" + fileName[i] + "0" + j);
-//                } else if (i == 4 && j >= 10) {
-//                    img = GetSpriteAtlas("tiles/" + fileName[i] + j);
-//                } else {
-//                    img = GetSpriteAtlas("tiles/" + fileName[i] + j);
-//                }
                 img = GetSpriteAtlas("tiles/" + fileName[i] + j);
 
                 tile[i][j].img = img;
@@ -84,10 +88,33 @@ public class TileManager {
         }
     }
 
-//    public static BufferedImage GetUnitTileMap(int x, int y) {
-//        BufferedImage imgUnit = tile[x][y].img;
-//        return imgUnit;
-//    }
+    public static int[][] ReadTextMap(String fileName) {
+        lvlData = new int[18][24];
+        int i = 0;
+
+        File file = new File("D:/Information Technology/Java NetBeans/Pokemon/res/map/tilemap.txt");
+        try {
+            BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8);
+            
+            String line = null;
+            while(true){
+                line = br.readLine();
+                if(line == null){
+                    break;
+                }else{
+                    String[] cutLine = line.split(" ");
+                    for (int j = 0; j < 24; j++) {
+                        lvlData[i][j] = Integer.parseInt(cutLine[j]);
+                    }
+                    i++;
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return lvlData;
+    }
 
     public static int[][] GetLevelData(BufferedImage img) {
         int[][] lvlData = new int[img.getHeight()][img.getWidth()];
@@ -106,21 +133,12 @@ public class TileManager {
 
         return lvlData;
     }
-    
-    public static void loadMapData(){
-        InputStream fi;
-        try{
-            
-//            fi = getClass().getResourceAsStream("/map/tilemap.txt");
-            
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-    }
+
 
     public void draw(Graphics2D g) {
-        BufferedImage imgMap = GetSpriteAtlas("/map/tilemap");
-        int[][] lvlData = GetLevelData(imgMap);
+//        BufferedImage imgMap = GetSpriteAtlas("/map/tilemap");
+//        int[][] lvlData = GetLevelData(imgMap);
+        lvlData = ReadTextMap("tilemap.txt");
 
         for (int i = 0; i < lvlData.length; i++) {
             for (int j = 0; j < lvlData[i].length; j++) {
@@ -140,7 +158,6 @@ public class TileManager {
 //        g.drawImage(tile[2 / 9][0 % 9].img, gamePanel.tileSize * 10 + 120, gamePanel.tileSize * 10, gamePanel.tileSize, gamePanel.tileSize, null);
 //        g.drawImage(tile[3 / 9][0 % 9].img, gamePanel.tileSize * 10 + 160, gamePanel.tileSize * 10, gamePanel.tileSize, gamePanel.tileSize, null);
 //        g.drawImage(tile[4 / 9][0 % 9].img, gamePanel.tileSize * 10+ 200, gamePanel.tileSize * 10, gamePanel.tileSize, gamePanel.tileSize, null);
-
     }
 
 }
