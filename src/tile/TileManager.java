@@ -30,13 +30,20 @@ public class TileManager {
     GamePanel gamePanel;
     public Tile[][] tile;
     String[] fileName = new String[]{
-        "flower/flower_0",
-        "grass/grass_0",
-        "no_grass/nograss_0",
-        "other/other_0",
-        "path/path_0",
-        "tree/tree_0",
-        "dirt/dirt_0"
+        "none",
+        "tiles/no_grass/nograss_",
+        "tiles/grass/grass_",
+        "tiles/obstructions/obstructions_",
+        "tiles/path/sand/sand_",
+        "tiles/flower/flower_",
+        "tiles/gate/gate_",
+        "tiles/tree/tree_",
+        "tiles/sea/sea_",
+        "tiles/still water/still water_",
+        "tiles/sign/sign_",
+        "tiles/path/green/pathgreen_",
+        "building/building_"
+
     };
     static int[][] lvlData;
 
@@ -46,9 +53,10 @@ public class TileManager {
 
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-        tile = new Tile[fileName.length][9];
+        tile = new Tile[fileName.length][30];
+//        lvlData = new int[gamePanel.maxWorldCol][gamePanel.maxWorldRow];
 
-        geteTileImage();
+        getTileImage();
 
     }
 
@@ -72,41 +80,53 @@ public class TileManager {
         return img;
     }
 
-    public void geteTileImage() {
+    public void getTileImage() {
         BufferedImage img = null;
 
         for (int i = 0; i < fileName.length; i++) {
+            if (i == 0) {
+                continue;
+            }
             for (int j = 0; j < GetTilesAmount(i); j++) {
                 tile[i][j] = new Tile();
 
-                img = GetSpriteAtlas("tiles/" + fileName[i] + j);
+                if (j < 10) {
+                    img = GetSpriteAtlas(fileName[i] + "0" + j);
+                } else {
+                    img = GetSpriteAtlas(fileName[i] + j);
+                }
 
                 tile[i][j].img = img;
             }
-            System.out.println(tile[i].length);
-
+//            System.out.println(tile[i].length);
         }
     }
 
     public static int[][] ReadTextMap(String fileName) {
-        lvlData = new int[18][24];
-        int i = 0;
+        lvlData = new int[28][36];
+//        lvlData = new int[50][50];
+        int i = -1;
 
-        File file = new File("D:/Information Technology/Java NetBeans/Pokemon/res/map/tilemap.txt");
+        File file = new File("D:/Information Technology/Java NetBeans/Pokemon/res/map/" + fileName);
         try {
             BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8);
-            
+
             String line = null;
-            while(true){
+            while (true) {
                 line = br.readLine();
-                if(line == null){
+                if (line == null) {
                     break;
-                }else{
-                    String[] cutLine = line.split(" ");
-                    for (int j = 0; j < 24; j++) {
+                } else {
+                    String[] cutLine = line.split("\t");
+                    i++;
+                    if (i == lvlData.length) {
+                        break;
+                    }
+                    for (int j = 0; j < cutLine.length; j++) {
+//                        System.out.println(j);
                         lvlData[i][j] = Integer.parseInt(cutLine[j]);
                     }
-                    i++;
+
                 }
             }
         } catch (IOException ex) {
@@ -116,41 +136,50 @@ public class TileManager {
         return lvlData;
     }
 
-    public static int[][] GetLevelData(BufferedImage img) {
-        int[][] lvlData = new int[img.getHeight()][img.getWidth()];
-
-        for (int j = 0; j < img.getHeight(); j++) {
-            for (int i = 0; i < img.getWidth(); i++) {
-                Color color = new Color(img.getRGB(i, j));
-                int value = color.getRed();
-
-                if (value >= 63) {
-                    value = 0;
-                }
-                lvlData[j][i] = value;
-            }
-        }
-
-        return lvlData;
-    }
-
-
+//    public static int[][] GetLevelData(BufferedImage img) {
+//        int[][] lvlData = new int[img.getHeight()][img.getWidth()];
+//
+//        for (int j = 0; j < img.getHeight(); j++) {
+//            for (int i = 0; i < img.getWidth(); i++) {
+//                Color color = new Color(img.getRGB(i, j));
+//                int value = color.getRed();
+//
+//                if (value >= 63) {
+//                    value = 0;
+//                }
+//                lvlData[j][i] = value;
+//            }
+//        }
+//
+//        return lvlData;
+//    }
     public void draw(Graphics2D g) {
-//        BufferedImage imgMap = GetSpriteAtlas("/map/tilemap");
-//        int[][] lvlData = GetLevelData(imgMap);
         lvlData = ReadTextMap("tilemap.txt");
 
         for (int i = 0; i < lvlData.length; i++) {
             for (int j = 0; j < lvlData[i].length; j++) {
+                int worldX = j * gamePanel.tileSize;
+                int worldY = i * gamePanel.tileSize;
+                int screenX = worldX - gamePanel.player.worldX + gamePanel.player.screenX;
+                int screenY = worldY - gamePanel.player.worldY + gamePanel.player.screenY;
                 int value = lvlData[i][j];
-                if (value == 45) {
-                    g.drawImage(tile[value / 9][value % 9].img, gamePanel.tileSize * j, gamePanel.tileSize * i - 28 * 2, 64, 90, null);
-                } else if (value != 5) {
-                    g.drawImage(tile[value / 9][value % 9].img, gamePanel.tileSize * j, gamePanel.tileSize * i, gamePanel.tileSize, gamePanel.tileSize, null);
-                }
-            }
-        }
 
+                if (check(worldX, worldY)) {
+                    if (value == 210) {
+                        g.drawImage(tile[value / 30][value % 30].img, screenX, screenY - 28 * 2, 64, 90, null);
+                    } else if (value == 343) {
+                        g.drawImage(tile[value / 30][value % 30].img, screenX, screenY, gamePanel.tileSize * 2, gamePanel.tileSize, null);
+                    } else if (value != 0 && value != 343) {
+                        g.drawImage(tile[value / 30][value % 30].img, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+                    } else if (value == 0) {
+                        continue;
+                    }
+                }
+
+//                g.drawImage(tile[value / 30][value % 30].img, gamePanel.tileSize * j, gamePanel.tileSize * i, gamePanel.tileSize, gamePanel.tileSize, null);
+            }
+
+        }
 //        g.drawImage(tile[6][0].img, gamePanel.tileSize * 10, gamePanel.tileSize * 10, gamePanel.tileSize, gamePanel.tileSize, null);
 //        g.drawImage(tile[18 / 9][18 % 9].img, gamePanel.tileSize * 10, gamePanel.tileSize * 10, gamePanel.tileSize, gamePanel.tileSize, null);
 //        g.drawImage(tile[0 / 9][0 % 9].img, gamePanel.tileSize * 10 + 40, gamePanel.tileSize * 10, gamePanel.tileSize, gamePanel.tileSize, null);
@@ -160,4 +189,10 @@ public class TileManager {
 //        g.drawImage(tile[4 / 9][0 % 9].img, gamePanel.tileSize * 10+ 200, gamePanel.tileSize * 10, gamePanel.tileSize, gamePanel.tileSize, null);
     }
 
+    public boolean check(int worldX, int worldY) {
+        return worldX + (gamePanel.tileSize * 2 + 8) > gamePanel.player.worldX - gamePanel.player.screenX
+                && worldX - (gamePanel.tileSize * 2 - 8) < gamePanel.player.worldX + gamePanel.player.screenX
+                && worldY + (gamePanel.tileSize * 2 + 8) > gamePanel.player.worldY - gamePanel.player.screenY
+                && worldY - (gamePanel.tileSize * 2 - 8) < gamePanel.player.worldY + gamePanel.player.screenY;
+    }
 }

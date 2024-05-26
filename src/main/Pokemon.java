@@ -9,7 +9,7 @@ public class Pokemon {
         GamePanel gamePanel = new GamePanel();
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
+        window.setResizable(true);
         window.setTitle("Pokemon Fan make");
         window.add(gamePanel);
         window.pack();

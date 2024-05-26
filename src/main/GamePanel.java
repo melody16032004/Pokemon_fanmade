@@ -2,6 +2,7 @@ package main;
 
 import entity.Flower;
 import entity.Player;
+import entity.Sea;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,23 +12,32 @@ import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
 
+    //SCREEN SETTING
     final int originalTileSize = 16;
     public final int scale = 2;
     public final int playerW = 14, playerH = 19;
 
     public final int tileSize = originalTileSize * (scale);
-    public final int maxScreenCol = 24;
-    public final int maxScreenRow = 18;
+    public final int maxScreenCol = 18;//24
+    public final int maxScreenRow = 14;//18
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
+    //WORLD SETTING
+    public final int maxWorldCol = 28;
+    public final int maxWorldRow = 36;
+    public final int worldWidth = tileSize * maxWorldCol;
+    public final int worldHeight = tileSize * maxWorldRow;
+
+    //FPS
     int FPS = 60;
 
     TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
-    Player player = new Player(this, keyHandler);
+    public Player player = new Player(this, keyHandler);
     Flower flower = new Flower(this);
+    Sea sea = new Sea(this);
 
     public GamePanel() {
 
@@ -70,7 +80,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             if (timer >= 1000000000) {
-                System.out.println("FPS: " + drawCount);
+//                System.out.println("FPS: " + drawCount);
                 drawCount = 0;
                 timer = 0;
             }
@@ -79,6 +89,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        sea.update();
         flower.update();
         player.update();
 
@@ -91,6 +102,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         tileManager.draw(g2);
+        sea.draw(g2);
         flower.draw(g2);
         player.draw(g2);
 

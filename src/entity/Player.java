@@ -8,30 +8,31 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
-import tile.TileManager;
 
 public class Player extends Entity {
 
     GamePanel gamePanel;
     KeyHandler keyHandler;
     private BufferedImage[][] anim;
-    private BufferedImage[] animFlower;
-    private FileInputStream fi;
-    private TileManager tileManager;
+    public final int screenX, screenY;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
+
+        screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
+        screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
 
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
-        x = 370;
-        y = 80;
-        speed = 2f;
+        worldX = gamePanel.tileSize * 12;
+        worldY = gamePanel.tileSize * 10;
+        speed = 4;
         direction = 0;
+        //370 80
     }
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
@@ -53,8 +54,6 @@ public class Player extends Entity {
 
         return img;
     }
-    
-    
 
     public void getPlayerImage() {
         anim = new BufferedImage[4][4];
@@ -63,35 +62,35 @@ public class Player extends Entity {
             for (int j = 0; j < anim.length; j++) {
                 switch (i) {
                     case 0 ->
-                        anim[i][j] = GetSpriteAtlas("player/down/down_0" + j);
+                        anim[i][j] = GetSpriteAtlas("player/movement/down/down_0" + j);
                     case 1 ->
-                        anim[i][j] = GetSpriteAtlas("player/up/up_0" + j);
+                        anim[i][j] = GetSpriteAtlas("player/movement/up/up_0" + j);
                     case 2 ->
-                        anim[i][j] = GetSpriteAtlas("player/left/left_0" + j);
+                        anim[i][j] = GetSpriteAtlas("player/movement/left/left_0" + j);
                     case 3 ->
-                        anim[i][j] = GetSpriteAtlas("player/right/right_0" + j);
+                        anim[i][j] = GetSpriteAtlas("player/movement/right/right_0" + j);
                 }
             }
         }
     }
-    
-    public void animationTick(){
+
+    public void animationTick() {
         spriteCount++;
-            if (spriteCount > 10) {
-                switch (spriteNum) {
-                    case 0 ->
-                        spriteNum = 1;
-                    case 1 ->
-                        spriteNum = 2;
-                    case 2 ->
-                        spriteNum = 3;
-                    case 3 ->
-                        spriteNum = 0;
-                    default -> {
-                    }
+        if (spriteCount > 7) {
+            switch (spriteNum) {
+                case 0 ->
+                    spriteNum = 1;
+                case 1 ->
+                    spriteNum = 2;
+                case 2 ->
+                    spriteNum = 3;
+                case 3 ->
+                    spriteNum = 0;
+                default -> {
                 }
-                spriteCount = 0;
             }
+            spriteCount = 0;
+        }
     }
 
     public void update() {
@@ -100,30 +99,30 @@ public class Player extends Entity {
             if (keyHandler.up) {
                 direction = UP;
                 if (keyHandler.speedRun) {
-                    y -= speed * 2f;
+                    worldY -= speed * 1f;
                 } else {
-                    y -= speed;
+                    worldY -= speed / 2;
                 }
             } else if (keyHandler.down) {
                 direction = DOWN;
                 if (keyHandler.speedRun) {
-                    y += speed * 2f;
+                    worldY += speed * 1f;
                 } else {
-                    y += speed;
+                    worldY += speed / 2;
                 }
             } else if (keyHandler.right) {
                 direction = RIGHT;
                 if (keyHandler.speedRun) {
-                    x += speed * 2f;
+                    worldX += speed * 1f;
                 } else {
-                    x += speed;
+                    worldX += speed / 2;
                 }
             } else if (keyHandler.left) {
                 direction = LEFT;
                 if (keyHandler.speedRun) {
-                    x -= speed * 2f;
+                    worldX -= speed * 1f;
                 } else {
-                    x -= speed;
+                    worldX -= speed / 2;
                 }
             }
 
@@ -145,10 +144,8 @@ public class Player extends Entity {
             case RIGHT ->
                 img = anim[RIGHT][spriteNum];
         }
-        g.drawImage(img, x, y, gamePanel.playerW * gamePanel.scale, gamePanel.playerH * gamePanel.scale, null);
-        
-        
-        
+        g.drawImage(img, screenX, screenY, gamePanel.playerW * gamePanel.scale, gamePanel.playerH * gamePanel.scale, null);
+
     }
 
 }
