@@ -89,6 +89,7 @@ public class Flower extends Entity {
                 if (tileManager.check(worldX, worldY));
                 {
                     if (value == 150) {
+                        //draw flower
                         g.drawImage(animFlower[spriteNum], screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
                     }
                 }
@@ -101,6 +102,7 @@ public class Flower extends Entity {
                 int value = lvlData[i][j];
 
                 if (tileManager.check(worldX, worldY)) {
+                    //draw building
                     if (value == 360) {                                                                      //256 144
                         g.drawImage(tileManager.tile[value / 30][value % 30].img, screenX - 24, screenY, 112 + 64, 72 + 57, null);
                     } else if (value == 361) {

@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,6 +23,12 @@ public class Player extends Entity {
 
         screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
         screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
+
+        rect = new Rectangle();
+        rect.x = 0;
+        rect.y = 3;
+        rect.width = 14;
+        rect.height = 16;
 
         setDefaultValues();
         getPlayerImage();
@@ -98,31 +105,51 @@ public class Player extends Entity {
 
             if (keyHandler.up) {
                 direction = UP;
-                if (keyHandler.speedRun) {
-                    worldY -= speed * 1f;
-                } else {
-                    worldY -= speed / 2;
-                }
+
             } else if (keyHandler.down) {
                 direction = DOWN;
-                if (keyHandler.speedRun) {
-                    worldY += speed * 1f;
-                } else {
-                    worldY += speed / 2;
-                }
+
             } else if (keyHandler.right) {
                 direction = RIGHT;
-                if (keyHandler.speedRun) {
-                    worldX += speed * 1f;
-                } else {
-                    worldX += speed / 2;
-                }
+
             } else if (keyHandler.left) {
                 direction = LEFT;
-                if (keyHandler.speedRun) {
-                    worldX -= speed * 1f;
-                } else {
-                    worldX -= speed / 2;
+
+            }
+
+            collisionOn = false;
+            gamePanel.collisionChecker.checkTile(this);
+
+            if (!collisionOn) {
+                switch (direction) {
+                    case UP -> {
+                        if (keyHandler.speedRun) {
+                            worldY -= speed * 1f;
+                        } else {
+                            worldY -= speed / 2;
+                        }
+                    }
+                    case DOWN -> {
+                        if (keyHandler.speedRun) {
+                            worldY += speed * 1f;
+                        } else {
+                            worldY += speed / 2;
+                        }
+                    }
+                    case LEFT -> {
+                        if (keyHandler.speedRun) {
+                            worldX -= speed * 1f;
+                        } else {
+                            worldX -= speed / 2;
+                        }
+                    }
+                    case RIGHT -> {
+                        if (keyHandler.speedRun) {
+                            worldX += speed * 1f;
+                        } else {
+                            worldX += speed / 2;
+                        }
+                    }
                 }
             }
 

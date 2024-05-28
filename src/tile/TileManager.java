@@ -45,7 +45,7 @@ public class TileManager {
         "building/building_"
 
     };
-    static int[][] lvlData;
+    public int[][] lvlData;
 
     public BufferedImage getTile(int x, int y) {
         return tile[x][y].img;
@@ -97,13 +97,15 @@ public class TileManager {
                 }
 
                 tile[i][j].img = img;
+                if(i == 6 && j == 0)
+                    tile[i][j].collision = true;
             }
 //            System.out.println(tile[i].length);
         }
     }
 
     public static int[][] ReadTextMap(String fileName) {
-        lvlData = new int[28][36];
+        int[][] lvlData = new int[28][36];
 //        lvlData = new int[50][50];
         int i = -1;
 
@@ -166,10 +168,10 @@ public class TileManager {
 
                 if (check(worldX, worldY)) {
                     if (value == 210) {
+                        //draw tree
                         g.drawImage(tile[value / 30][value % 30].img, screenX, screenY - 28 * 2, 64, 90, null);
-                    } else if (value == 343) {
-                        g.drawImage(tile[value / 30][value % 30].img, screenX, screenY, gamePanel.tileSize * 2, gamePanel.tileSize, null);
-                    } else if (value != 0 && value != 343) {
+                    } else if (value != 0) {
+                        //draw anything left
                         g.drawImage(tile[value / 30][value % 30].img, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
                     } else if (value == 0) {
                         continue;

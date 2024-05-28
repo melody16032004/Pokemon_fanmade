@@ -1,6 +1,8 @@
 
 package entity;
 
+import java.awt.Rectangle;
+
 
 public class Entity {
     public int worldX, worldY;
@@ -13,5 +15,7 @@ public class Entity {
     public int spriteNum = 0;
     public int spriteCountBot = 0;
     public  int spriteNumBot = 1;
+    public Rectangle rect;
+    public boolean collisionOn = false;
     
 }
