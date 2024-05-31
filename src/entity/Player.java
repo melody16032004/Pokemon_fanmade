@@ -29,14 +29,15 @@ public class Player extends Entity {
         rect.y = 3;
         rect.width = 14;
         rect.height = 16;
+        
 
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
-        worldX = gamePanel.tileSize * 12;
-        worldY = gamePanel.tileSize * 10;
+        worldX = gamePanel.tileSize * 16;
+        worldY = gamePanel.tileSize * 16;
         speed = 4;
         direction = 0;
         //370 80
@@ -118,24 +119,26 @@ public class Player extends Entity {
             }
 
             collisionOn = false;
-            gamePanel.collisionChecker.checkTile(this);
+//            gamePanel.collisionChecker.checkTile(this);
 
             if (!collisionOn) {
                 switch (direction) {
                     case UP -> {
                         if (keyHandler.speedRun) {
-                            worldY -= speed * 1f;
+                            worldY -= speed * 2f;
                         } else {
-                            worldY -= speed / 2;
+                            worldY -= 2;
                         }
                     }
+
                     case DOWN -> {
                         if (keyHandler.speedRun) {
-                            worldY += speed * 1f;
+                            worldY += speed * 2f;
                         } else {
-                            worldY += speed / 2;
+                            worldY += 2;
                         }
                     }
+
                     case LEFT -> {
                         if (keyHandler.speedRun) {
                             worldX -= speed * 1f;
@@ -143,6 +146,7 @@ public class Player extends Entity {
                             worldX -= speed / 2;
                         }
                     }
+
                     case RIGHT -> {
                         if (keyHandler.speedRun) {
                             worldX += speed * 1f;
@@ -150,6 +154,7 @@ public class Player extends Entity {
                             worldX += speed / 2;
                         }
                     }
+
                 }
             }
 
