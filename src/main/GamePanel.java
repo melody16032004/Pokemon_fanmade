@@ -3,6 +3,7 @@ package main;
 import entity.Flower;
 import entity.Player;
 import entity.Sea;
+import entity.Tree;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -18,14 +19,14 @@ public class GamePanel extends JPanel implements Runnable {
     public final int playerW = 14, playerH = 19;
 
     public final int tileSize = originalTileSize * (scale);
-    public final int maxScreenCol = 18;//24
-    public final int maxScreenRow = 14;//18
+    public final int maxScreenCol = 15;//15
+    public final int maxScreenRow = 12;//12
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
     //WORLD SETTING
-    public final int maxWorldCol = 28;
-    public final int maxWorldRow = 36;
+    public final int maxWorldCol = 72;//28
+    public final int maxWorldRow = 46;//36
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
 
@@ -39,6 +40,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyHandler);
     Flower flower = new Flower(this);
     Sea sea = new Sea(this);
+    Tree tree = new Tree(this);
 
     public GamePanel() {
 
@@ -47,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setBackground(Color.black);
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
+        
 
     }
 
@@ -91,9 +94,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         sea.update();
+        
         flower.update();
         player.update();
-
     }
 
     @Override
@@ -104,9 +107,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileManager.draw(g2);
         sea.draw(g2);
+        
         flower.draw(g2);
         player.draw(g2);
-
+        tree.draw(g2);
         g2.dispose();
     }
 

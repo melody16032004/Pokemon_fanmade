@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 
 public class Entity {
-    public int worldX, worldY;
+    public float worldX, worldY;
     public int speed;
     
     public int direction;

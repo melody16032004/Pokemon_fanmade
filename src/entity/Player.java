@@ -9,10 +9,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.KeyHandler;
+import tile.TileManager;
 
 public class Player extends Entity {
 
     GamePanel gamePanel;
+    TileManager tileManager = new TileManager(gamePanel);
     KeyHandler keyHandler;
     private BufferedImage[][] anim;
     public final int screenX, screenY;
@@ -27,17 +29,18 @@ public class Player extends Entity {
         rect = new Rectangle();
         rect.x = 0;
         rect.y = 3;
-        rect.width = 14;
-        rect.height = 16;
-        
+        rect.width = 24;
+        rect.height = 30;
 
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
-        worldX = gamePanel.tileSize * 16;
-        worldY = gamePanel.tileSize * 16;
+//        worldX = gamePanel.tileSize * 16;
+//        worldY = gamePanel.tileSize * 16;
+        worldX = gamePanel.tileSize*12;//gamePanel.tileSize / 2 * 0;//12
+        worldY = gamePanel.tileSize*120;//gamePanel.tileSize / 2 * 0;//119
         speed = 4;
         direction = 0;
         //370 80
@@ -106,7 +109,6 @@ public class Player extends Entity {
 
             if (keyHandler.up) {
                 direction = UP;
-
             } else if (keyHandler.down) {
                 direction = DOWN;
 
@@ -115,33 +117,32 @@ public class Player extends Entity {
 
             } else if (keyHandler.left) {
                 direction = LEFT;
-
             }
 
             collisionOn = false;
-//            gamePanel.collisionChecker.checkTile(this);
+            gamePanel.collisionChecker.checkTile(this);
 
             if (!collisionOn) {
                 switch (direction) {
                     case UP -> {
                         if (keyHandler.speedRun) {
-                            worldY -= speed * 2f;
-                        } else {
-                            worldY -= 2;
+                            worldY -= speed * 3f;
+                        } else {                           
+                            worldY -= speed / 2;
                         }
                     }
 
                     case DOWN -> {
                         if (keyHandler.speedRun) {
-                            worldY += speed * 2f;
+                            worldY += speed * 3f;
                         } else {
-                            worldY += 2;
+                            worldY += speed / 2;
                         }
                     }
 
                     case LEFT -> {
                         if (keyHandler.speedRun) {
-                            worldX -= speed * 1f;
+                            worldX -= speed * 3f;
                         } else {
                             worldX -= speed / 2;
                         }
@@ -149,7 +150,7 @@ public class Player extends Entity {
 
                     case RIGHT -> {
                         if (keyHandler.speedRun) {
-                            worldX += speed * 1f;
+                            worldX += speed * 3f;
                         } else {
                             worldX += speed / 2;
                         }
@@ -157,7 +158,26 @@ public class Player extends Entity {
 
                 }
             }
-
+//            else{
+//                switch (direction) {
+//                    case UP -> {
+//                        worldY = speed / 2;
+//                    }
+//
+//                    case DOWN -> {
+//                        worldY = speed / 2;
+//                    }
+//
+//                    case LEFT -> {
+//                        worldX -= speed / 2;
+//                    }
+//
+//                    case RIGHT -> {
+//                        worldX += speed / 2;
+//                    }
+//
+//                }
+//            }
             animationTick();
         }
     }

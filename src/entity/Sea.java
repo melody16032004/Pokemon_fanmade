@@ -122,8 +122,8 @@ public class Sea extends Entity {
             for (int j = 0; j < lvlData[i].length; j++) {
                 int worldX = j * gamePanel.tileSize;
                 int worldY = i * gamePanel.tileSize;
-                int screenX = worldX - gamePanel.player.worldX + gamePanel.player.screenX;
-                int screenY = worldY - gamePanel.player.worldY + gamePanel.player.screenY;
+                int screenX = (int) (worldX - gamePanel.player.worldX + gamePanel.player.screenX);
+                int screenY = (int) (worldY - gamePanel.player.worldY + gamePanel.player.screenY);
                 int value = lvlData[i][j];
 
                 if (tileManager.check(worldX, worldY)) {
@@ -132,6 +132,8 @@ public class Sea extends Entity {
                         g.drawImage(animSea[spriteNum], screenX, screenY, 96, 48, null);
                     } else if (value == 241) {
                         g.drawImage(animSea[spriteNumBot], screenX, screenY, 96, 48, null);
+                    } else if (value == 242){
+                        continue;
                     }
                 }
             }

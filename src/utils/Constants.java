@@ -17,6 +17,7 @@ public class Constants {
         public static final int SIGN = 10;
         public static final int GREEN = 11;
         public static final int BUILDING = 12;
+        public static final int WHITE = 13;
 
         public static int GetTilesAmount(int tiles) {
             switch (tiles) {
@@ -30,7 +31,7 @@ public class Constants {
                     return 1;
                 }
                 case OBSTRUCTIONS -> {
-                    return 4;
+                    return 9;
                 }
                 case SAND -> {
                     return 13;
@@ -42,7 +43,7 @@ public class Constants {
                     return 5;
                 }
                 case TREE -> {
-                    return 2;
+                    return 3;
                 }
                 case SEA -> {
                     return 16;
@@ -58,6 +59,9 @@ public class Constants {
                 }
                 case BUILDING -> {
                     return 2;
+                }
+                case WHITE -> {
+                    return 9;
                 }
                 default -> {
                     return 0;
