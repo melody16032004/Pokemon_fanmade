@@ -1,15 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package main;
 
 import java.util.Random;
 
-/**
- *
- * @author Lê Minh
- */
+
 public class ListPokemon {
     private int no;
     private String name;
