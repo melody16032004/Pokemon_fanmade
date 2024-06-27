@@ -27,10 +27,15 @@ public class ListPokemon {
 
     private int levelToNextRank;
     private int condition;
+    private Tuple<Integer,Integer> narute;
+    private int level;
+    private double num1;
+    private double num2;
+    private int num3;
 
     public ListPokemon(int no, String name, String type, int height, int weight,
                        String evYield, int baseExp, String growthRate, 
-                       int hp, int atk, int def, int spAtk, int spDef, int speed) {
+                       int hp, int atk, int def, int spAtk, int spDef, int speed,int iv,int ev,int lv , Tuple<Integer,Integer> nature) {
         this.no = no;
         this.name = name;
         this.type = type;
@@ -46,16 +51,19 @@ public class ListPokemon {
         this.spDef = spDef;
         this.speed = speed;
 
-        this.ivs = new int[6];
-        Random rand = new Random();
-        for (int i = 0; i < ivs.length; i++) {
-            ivs[i] = rand.nextInt(32);
-        }
+        this.ivs = new int{iv,iv,iv,iv,iv,iv};
+        this.evs = new int[]{ev,ev,ev,ev,ev,ev};
+        this.level = lv;
+        this nature = nature;
 
-        this.evs = new int[6];
         this.levelToNextRank = 0;
-        this.setCondition(0);  
+        this.setCondition(0);
+
+        this.num1 = 0;
+        this.num2 = 0;
+        this.num3 = 0;
     }
+    public ListPokemon(
 
     // Getters and Setters
     public int getNo() { return no; }
